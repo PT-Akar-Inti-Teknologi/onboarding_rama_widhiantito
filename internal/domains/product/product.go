@@ -6,3 +6,8 @@ type Product struct {
 	Price int    `json:"price"`
 	Stock int    `json:"stock"`
 }
+
+type ProductList struct {
+	ProductID uint `json:"id_product"`
+	Quantity  int  `json:"quantity"`
+}

@@ -14,17 +14,14 @@ type ProductHandler struct {
 }
 
 func (ph *ProductHandler) CreateProduct(c *gin.Context) {
-	var productBody struct {
-		Name  string `json:"name"`
-		Price int    `json:"price"`
-		// Add other fields if required
-	}
-	if err := c.ShouldBindJSON(&productBody); err != nil {
+	newProduct := new(product.Product)
+
+	if err := c.ShouldBindJSON(&newProduct); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	newProduct, err := ph.ProductService.CreateProduct(productBody.Name, productBody.Price)
+	newProduct, err := ph.ProductService.CreateProduct(newProduct)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -50,7 +47,6 @@ func (ph *ProductHandler) GetProductByID(c *gin.Context) {
 }
 
 func (ph *ProductHandler) UpdateProduct(c *gin.Context) {
-
 	updateProduct := new(product.Product)
 	if err := c.ShouldBindJSON(updateProduct); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
