@@ -27,7 +27,7 @@ func (ph *ProductHandler) CreateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, newProduct)
+	CreateDetailResponse(c, respCodeProduct200, newProduct)
 }
 
 func (ph *ProductHandler) GetProductByID(c *gin.Context) {
@@ -43,7 +43,7 @@ func (ph *ProductHandler) GetProductByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, product)
+	CreateDetailResponse(c, "INTERNAL-PRODUCT-200", product)
 }
 
 func (ph *ProductHandler) UpdateProduct(c *gin.Context) {
@@ -67,7 +67,5 @@ func (ph *ProductHandler) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, updatedProduct)
+	CreateDetailResponse(c, respCodeProduct200, updatedProduct)
 }
-
-// Implement other product-related handlers

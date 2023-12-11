@@ -29,6 +29,12 @@ func (oh *OrderHandler) CreateOrder(c *gin.Context) {
 		return
 	}
 
+	err := bodyRequest.Customer.Validate()
+	if err != nil {
+		CreateErrorResponse(c, respCodeOrder200, err.Error())
+		return
+	}
+
 	dataCustomer, err := oh.CustomerService.GetCustomerByEmail(bodyRequest.Customer.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -59,7 +65,11 @@ func (oh *OrderHandler) CreateOrder(c *gin.Context) {
 		oh.ProductService.UpdateStock(v.ProductID, v.Quantity)
 	}
 
-	c.JSON(http.StatusCreated, newOrder)
+	data := gin.H{
+		"order": newOrder,
+	}
+
+	CreateDetailResponse(c, respCodeOrder200, data)
 }
 
 func (oh *OrderHandler) GetOrderByID(c *gin.Context) {

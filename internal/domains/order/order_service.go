@@ -22,8 +22,7 @@ type OrderItemService interface {
 }
 
 type orderService struct {
-	orderRepository     OrderRepository
-	orderItemRepository OrderItemRepository
+	orderRepository OrderRepository
 }
 
 type orderItemService struct {

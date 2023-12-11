@@ -7,6 +7,7 @@ import (
 
 type CustomerService interface {
 	GetCustomerByEmail(email string) (*Customer, error)
+	ValidateCustomer(*Customer) ([]string, bool)
 }
 
 type customerService struct {
@@ -29,4 +30,8 @@ func (cs *customerService) GetCustomerByEmail(email string) (*Customer, error) {
 		return nil, errors.New("customer not found")
 	}
 	return customer, nil
+}
+
+func (cs *customerService) ValidateCustomer(dataCustomer *Customer) ([]string, bool) {
+	return nil, true
 }
