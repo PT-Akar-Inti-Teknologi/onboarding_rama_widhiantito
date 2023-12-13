@@ -50,12 +50,7 @@ func (ps *productService) UpdateProduct(productID uint, dataProduct *Product) (*
 		return nil, fmt.Errorf("failed to get product: %w", err)
 	}
 
-	if existingProduct == nil {
-		return nil, errors.New("product not found")
-	}
-
 	dataProduct.ID = existingProduct.ID
-	// Update other fields as needed
 
 	if err := ps.productRepository.UpdateProduct(dataProduct); err != nil {
 		return nil, fmt.Errorf("failed to update product: %w", err)

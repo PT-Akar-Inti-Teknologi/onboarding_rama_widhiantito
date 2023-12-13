@@ -55,7 +55,7 @@ func (ph *ProductHandler) UpdateProduct(c *gin.Context) {
 
 	productID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
+		CreateErrorResponse(c, respCodeProduct200, err.Error())
 		return
 	}
 

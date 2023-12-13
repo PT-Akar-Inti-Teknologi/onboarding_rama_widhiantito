@@ -54,7 +54,12 @@ func (fh *FileHandler) HandleFileUpload(c *gin.Context) {
 	}
 
 	dataOrder.TransferProofID = data.ID
-	dataOrder, _ = fh.OrderService.UpdateOrder(dataOrder.ID, "in_review")
+	fmt.Println(dataOrder.TransferProofID)
+	dataOrder, err = fh.OrderService.UpdateOrder(dataOrder.ID, dataOrder)
+	if err != nil {
+		CreateErrorResponse(c, respCodeOrder200, err.Error())
+		return
+	}
 
 	dataResp := gin.H{
 		"file":  data,

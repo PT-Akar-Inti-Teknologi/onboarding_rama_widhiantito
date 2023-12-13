@@ -93,4 +93,25 @@ func (oh *OrderHandler) GetOrderByID(c *gin.Context) {
 	c.JSON(http.StatusOK, order)
 }
 
-// Implement handlers for UpdateOrder, DeleteOrder, and other functionalities
+func (oh *OrderHandler) UpdateProduct(c *gin.Context) {
+	updateOrder := new(order.Order)
+	if err := c.ShouldBindJSON(updateOrder); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	orderID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		CreateErrorResponse(c, respCodeProduct200, err.Error())
+		return
+	}
+
+	updateOrder.ID = uint(orderID)
+	updatedOrder, err := oh.OrderService.UpdateOrder(uint(orderID), updateOrder)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	CreateDetailResponse(c, respCodeProduct200, updatedOrder)
+}

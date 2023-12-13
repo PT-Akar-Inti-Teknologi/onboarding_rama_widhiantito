@@ -8,7 +8,7 @@ import (
 type OrderService interface {
 	CreateOrder(newOrder *Order) (*Order, error)
 	GetOrderByID(orderID uint) (*Order, error)
-	UpdateOrder(orderID uint, status string) (*Order, error)
+	UpdateOrder(orderID uint, dataOrder *Order) (*Order, error)
 	DeleteOrder(orderID uint) error
 	// Other methods as required
 }
@@ -48,28 +48,22 @@ func (os *orderService) GetOrderByID(orderID uint) (*Order, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get order: %w", err)
 	}
-	if order == nil {
-		return nil, errors.New("order not found")
-	}
 	return order, nil
 }
 
-func (os *orderService) UpdateOrder(orderID uint, status string) (*Order, error) {
-	order, err := os.orderRepository.GetOrderByID(orderID)
+func (os *orderService) UpdateOrder(orderID uint, dataOrder *Order) (*Order, error) {
+	existingOrder, err := os.orderRepository.GetOrderByID(orderID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get order: %w", err)
 	}
-	if order == nil {
-		return nil, errors.New("order not found")
-	}
 
-	order.Status = status
+	dataOrder.ID = existingOrder.ID
 
-	if err := os.orderRepository.UpdateOrder(order); err != nil {
+	if err := os.orderRepository.UpdateOrder(dataOrder); err != nil {
 		return nil, fmt.Errorf("failed to update order: %w", err)
 	}
 
-	return order, nil
+	return dataOrder, nil
 }
 
 func (os *orderService) DeleteOrder(orderID uint) error {
@@ -87,7 +81,6 @@ func (ois *orderItemService) CreateOrderItem(orderID, productID uint, quantity i
 		OrderID:   orderID,
 		ProductID: productID,
 		Quantity:  quantity,
-		// Add other fields as needed
 	}
 
 	if err := ois.orderItemRepository.CreateOrderItem(newOrderItem); err != nil {

@@ -82,6 +82,7 @@ func main() {
 	orderRoutes := router.Group("/orders")
 	{
 		orderRoutes.POST("/", orderHandler.CreateOrder)
+		orderRoutes.PUT("update/:id", orderHandler.UpdateProduct)
 	}
 
 	fileRoutes := router.Group("/files")

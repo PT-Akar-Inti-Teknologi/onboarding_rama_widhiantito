@@ -1,6 +1,8 @@
 package customer
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type CustomerRepository interface {
 	CreateCustomer(customer *Customer) error
@@ -25,5 +27,6 @@ func (cr *customerRepo) GetCustomerByEmail(email string) (*Customer, error) {
 	if err := cr.db.Where("email = ?", email).First(&customer).Error; err != nil {
 		return nil, err
 	}
+
 	return &customer, nil
 }
